@@ -78,18 +78,28 @@ song.src = "sound/ITTheme.mp3";
 
 function update() {
     harold.src = 'img/harold.png';
-    song.play();
+    // song.play();
 
     //=========== sprite management =============
-    if ((keys[' '] || keys['ArrowUp']) && keys['ArrowRight']) {
-        harold.src = 'img/haroldJumpRight.png';
-    } else if (keys[' '] || keys['ArrowUp']) {
+
+    if (player.jumping && keys['ArrowRight']) {
+        if (player.velY < 0) {
+            harold.src = 'img/haroldJumpRight.png';
+        } else if (player.velY > 0) {
+            harold.src = 'img/haroldDownRight.png';
+        }
+    }
+    else if (player.jumping && keys['ArrowLeft']) {
+        if (player.velY < 0) {
+            harold.src = 'img/haroldJumpLeft.png';
+        } else if (player.velY > 0) {
+            harold.src = 'img/haroldDownLeft.png';
+        }
+    }
+    else if (player.velY < 0) {
         harold.src = 'img/haroldJump.png';
     } else if (keys['ArrowRight']) {
         harold.src = 'img/haroldRight.png';
-    }
-    if ((keys[' '] || keys['ArrowUp']) && keys['ArrowLeft']) {
-        harold.src = 'img/haroldJumpLeft.png';
     } else if (keys['ArrowLeft']) {
         harold.src = 'img/haroldLeft.png';
     }
@@ -132,6 +142,7 @@ function update() {
     ctx.fillText("Stigaskor: " + score, 30, 50);
 
 
+
     // ================ TEIKNA VEGGI OG GÓLF ===============================
 
     for (var i = 0; i < boxes.length; i++) {//print boxes
@@ -158,6 +169,12 @@ function update() {
 
     for (var i = 0; i < platforms.length; i++) {
         ctx.fillStyle = 'green';
+
+        //reyna finna 10 hvern platform og láta hann covera allan skjáinn í width
+        // if ((i !== 0) && (i % 10 === 0)) {
+        //     // platforms[i].width = width;
+        //     console.log('yes');
+        // }
         ctx.rect(platforms[i].x, platforms[i].y, platforms[i].width, platforms[i].height);
         platforms[i].velY = gravity * 5;
         platforms[i].y += platforms[i].velY * 2;
@@ -196,7 +213,6 @@ function update() {
 
     ctx.drawImage(harold, player.x, player.y, player.width, player.height);
 
-
     if (player.y < height) {
         requestAnimationFrame(update);
     } else {
@@ -215,7 +231,6 @@ function update() {
 
 setInterval(() => {
     score += 10;
-    console.log(score);
     platforms.push({
         x: (Math.random() * ((width - 300) - 20) + 20),
         y: -20,
@@ -281,6 +296,7 @@ document.body.addEventListener("keydown", function (e) {
 // og setur þann takka í false inní keys array
 
 document.body.addEventListener("keyup", function (e) {
+
     keys[e.key] = false;
 });
 
