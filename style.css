@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: crimson;
 }
 
 canvas {
@@ -10,4 +11,16 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgb(111,49,152);
+}
+
+h2{
+    position: absolute;
+    display: inline;
+    transform: translate(-50%);
+    top: 400px;
+    left: -200px;
+    transform: rotate(-70deg);
+    font-size: 80px;
+    text-shadow: 3px 3px 20px black;
+    color: white;
 }

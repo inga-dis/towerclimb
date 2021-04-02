@@ -24,13 +24,15 @@ var canvas = document.getElementById("canvas"),
 
     // ================ global variables ======================
     keys = [],
-    friction = 0.8,
+    friction = .9,
     gravity = 0.4,
     boxes = [],
     platforms = [],
     score = 0,
     playerHeight = 1,
-    harold = new Image();
+    harold = new Image(),
+    song = new Audio();
+
 
 
 // ======== static veggir og jörð sett inní array ===================
@@ -43,8 +45,6 @@ boxes.push({
     width: width,
     height: 20
 });
-
-
 
 //vinstri veggur
 boxes.push({
@@ -74,22 +74,24 @@ boxes.push({
 canvas.width = width;
 canvas.height = height;
 
+song.src = "sound/ITTheme.mp3";
 
 function update() {
-    harold.src = '/harold.png';
+    harold.src = 'img/harold.png';
+    song.play();
 
     //=========== sprite management =============
     if ((keys[' '] || keys['ArrowUp']) && keys['ArrowRight']) {
-        harold.src = '/haroldJumpRight.png';
+        harold.src = 'img/haroldJumpRight.png';
     } else if (keys[' '] || keys['ArrowUp']) {
-        harold.src = '/haroldJump.png';
+        harold.src = 'img/haroldJump.png';
     } else if (keys['ArrowRight']) {
-        harold.src = '/haroldRight.png';
+        harold.src = 'img/haroldRight.png';
     }
     if ((keys[' '] || keys['ArrowUp']) && keys['ArrowLeft']) {
-        harold.src = '/haroldJumpLeft.png';
+        harold.src = 'img/haroldJumpLeft.png';
     } else if (keys['ArrowLeft']) {
-        harold.src = '/haroldLeft.png';
+        harold.src = 'img/haroldLeft.png';
     }
 
 
@@ -122,6 +124,12 @@ function update() {
     ctx.clearRect(0, 0, width, height);
     ctx.beginPath();
     player.grounded = false;
+
+    // ================ teikna score ======================
+
+    ctx.fillStyle = "white";
+    ctx.font = "40px Arial";
+    ctx.fillText("Stigaskor: " + score, 30, 50);
 
 
     // ================ TEIKNA VEGGI OG GÓLF ===============================
@@ -166,6 +174,8 @@ function update() {
             // að hann sé standandi á honum
             player.velY = platforms[i].velY;
         }
+        //ehv pæling til að phasea ekki í gegnum loftið
+        //óþarfi að nota ef ekki hægt að fara gegnum platforms
         // else if (dir === "t") {
         //     if (platforms[i].y < platforms[i].height) {
         //         player.velY *= -1;
@@ -186,10 +196,6 @@ function update() {
 
     ctx.drawImage(harold, player.x, player.y, player.width, player.height);
 
-
-    // if (player.y > height) {
-    //     console.log('game over');
-    // }
 
     if (player.y < height) {
         requestAnimationFrame(update);
@@ -218,7 +224,6 @@ setInterval(() => {
         width: 300,
         height: 40,
         velY: 0,
-        score: 10
     })
 }, 900);
 //setja breytu í stað 1000 hérna til að setja gamespeed, þarf þá líka að stilla gravity á platforms í leiðinni!!
