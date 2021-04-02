@@ -31,7 +31,7 @@ var canvas = document.getElementById("canvas"),
     score = 0,
     playerHeight = 1;
 
-// ======== veggir og jörð  ===================
+// ======== static veggir og jörð sett inní array ===================
 
 //jörð
 
@@ -44,7 +44,7 @@ boxes.push({
 
 
 
-//left veggur
+//vinstri veggur
 boxes.push({
     x: 0,
     y: 0,
@@ -146,7 +146,6 @@ function update() {
             // setur player Y velocity í sama og pallurinn sem hann snertir til að líkja eftir
             // að hann sé standandi á honum
             player.velY = platforms[i].velY;
-            player.y = platforms[i].y - player.height;
         }
         // else if (dir === "t") {
         //     if (platforms[i].y < platforms[i].height) {
