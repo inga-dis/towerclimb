@@ -6,7 +6,7 @@
 var canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d"),
     width = 1500,
-    height = 800,
+    height = 1100,
 
     // ============ player object =====================
     player = {
@@ -29,7 +29,9 @@ var canvas = document.getElementById("canvas"),
     boxes = [],
     platforms = [],
     score = 0,
-    playerHeight = 1;
+    playerHeight = 1,
+    harold = new Image();
+
 
 // ======== static veggir og jörð sett inní array ===================
 
@@ -74,6 +76,23 @@ canvas.height = height;
 
 
 function update() {
+    harold.src = '/harold.png';
+
+    //=========== sprite management =============
+    if ((keys[' '] || keys['ArrowUp']) && keys['ArrowRight']) {
+        harold.src = '/haroldJumpRight.png';
+    } else if (keys[' '] || keys['ArrowUp']) {
+        harold.src = '/haroldJump.png';
+    } else if (keys['ArrowRight']) {
+        harold.src = '/haroldRight.png';
+    }
+    if ((keys[' '] || keys['ArrowUp']) && keys['ArrowLeft']) {
+        harold.src = '/haroldJumpLeft.png';
+    } else if (keys['ArrowLeft']) {
+        harold.src = '/haroldLeft.png';
+    }
+
+
     // ================= key inputs, movement ==========================
     if (keys[' '] || keys['ArrowUp']) {
         // up arrow eða space
@@ -162,8 +181,10 @@ function update() {
     // ================ TEIKNAR PLAYER =====================
 
     ctx.fill();
-    ctx.fillStyle = 'red';
-    ctx.fillRect(player.x, player.y, player.width, player.height);
+    // ctx.fillStyle = 'red';
+    // ctx.fillRect(player.x, player.y, player.width, player.height);
+
+    ctx.drawImage(harold, player.x, player.y, player.width, player.height);
 
 
     // if (player.y > height) {
@@ -198,16 +219,9 @@ setInterval(() => {
         height: 40,
         velY: 0,
         score: 10
-    }, {
-        x: (Math.random() * ((width - 300) - 20) + 20),
-        y: (Math.random() * -500),
-        width: 300,
-        height: 40,
-        velY: 0,
-        score: 10
     })
-}, 1000);
-//setja breytu í stað 1500 hérna til að setja gamespeed, þarf þá líka að stilla gravity á platforms í leiðinni!!
+}, 900);
+//setja breytu í stað 1000 hérna til að setja gamespeed, þarf þá líka að stilla gravity á platforms í leiðinni!!
 
 // ===================== COLLISION CHECK ÚTREIKNINGUR =====================
 
@@ -275,3 +289,9 @@ document.body.addEventListener("keyup", function (e) {
 window.addEventListener("load", function () {
     update();
 });
+
+
+
+
+
+// ==================== CHARACTER ANIMATION FRÁ SPRITESHEET ===========================
