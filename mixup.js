@@ -5,15 +5,15 @@
 
 var canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d"),
-    width = 1500,
+    width = 1200,
     height = 1100,
 
     // ============ player object =====================
     player = {
         x: width / 2,
-        y: 200,
-        width: 80,
-        height: 100,
+        y: height - 200,
+        width: 105,
+        height: 150,
         speed: 3,
         velX: 0,
         velY: 0,
@@ -29,21 +29,55 @@ var canvas = document.getElementById("canvas"),
     boxes = [],
     platforms = [],
     score = 0,
-    playerHeight = 1,
     harold = new Image(),
-    song = new Audio();
+    platformImg = new Image(),
+    song = new Audio(),
+    death = new Audio(),
+    jump = new Audio();
 
 
 
 // ======== static veggir og jörð sett inní array ===================
 
-//jörð
-
-boxes.push({
+//pusha nokkrum platforms í byrjun til að hefja leik
+platforms.push({
     x: 0,
-    y: height - 20,
+    y: height - 100,
     width: width,
-    height: 20
+    height: 100,
+    velY: 0
+});
+
+platforms.push({
+    x: (Math.random() * ((width - 300) - 20) + 20),
+    y: 400,
+    width: 300,
+    height: 60,
+    velY: 0,
+});
+
+platforms.push({
+    x: (Math.random() * ((width - 300) - 20) + 20),
+    y: 600,
+    width: 300,
+    height: 60,
+    velY: 0,
+});
+
+platforms.push({
+    x: (Math.random() * ((width - 300) - 20) + 20),
+    y: 200,
+    width: 300,
+    height: 60,
+    velY: 0,
+});
+
+platforms.push({
+    x: (Math.random() * ((width - 300) - 20) + 20),
+    y: 100,
+    width: 300,
+    height: 60,
+    velY: 0,
 });
 
 //vinstri veggur
@@ -62,23 +96,20 @@ boxes.push({
     height: height
 });
 
-//loft
-boxes.push({
-    x: 0,
-    y: 0,
-    width: width,
-    height: 0.01
-})
+console.log(boxes);
 
 
 canvas.width = width;
 canvas.height = height;
 
 song.src = "sound/ITTheme.mp3";
+jump.src = '/sound/Jump2.wav';
+death.src = '/sound/death_7_ian.wav'
+
 
 function update() {
-    harold.src = 'img/harold.png';
-    // song.play();
+    harold.src = 'img/harold(1).png';
+
 
     //=========== sprite management =============
 
@@ -96,7 +127,7 @@ function update() {
             harold.src = 'img/haroldDownLeft.png';
         }
     }
-    else if (player.velY < 0) {
+    else if (player.velY < 0 || player.jumping) {
         harold.src = 'img/haroldJump.png';
     } else if (keys['ArrowRight']) {
         harold.src = 'img/haroldRight.png';
@@ -112,6 +143,7 @@ function update() {
             player.jumping = true;
             player.grounded = false;
             player.velY = -player.speed * 4;// breyta constant hérna til að setja jump hæð
+            jump.play();
         }
     }
     if (keys['ArrowRight']) {
@@ -142,67 +174,70 @@ function update() {
     ctx.fillText("Stigaskor: " + score, 30, 50);
 
 
-
-    // ================ TEIKNA VEGGI OG GÓLF ===============================
+    // ================ TEIKNA VEGGI OG TJÉKKA COLLISION ===============================
 
     for (var i = 0; i < boxes.length; i++) {//print boxes
-        ctx.fillStyle = 'blue';
         ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
         var dir = colCheck(player, boxes[i]);
 
         if (dir === "l" || dir === "r") {
             player.velX = 0;
-            player.jumping = false;
+            // player.jumping = false;
         } else if (dir === "b") {
             player.grounded = true;
             player.jumping = false;
-        } else if (dir === "t") {
-            player.velY *= -1;
         }
-        if (player.grounded) {
-            player.velY = 0;
-        }
+        // þarf liklega ekki lengur
+        // else if (dir === "t") {
+        //     player.velY *= -1;
+        // }
+        // ekki þetta heldur
+        // if (player.grounded) {
+        //     player.velY = 0;
+        // }
 
     }
 
     // ============= BÚA TIL PLATFORMS OG TJÉKKA COLLISION VIÐ PLAYER =====================
 
     for (var i = 0; i < platforms.length; i++) {
-        ctx.fillStyle = 'green';
 
-        //reyna finna 10 hvern platform og láta hann covera allan skjáinn í width
-        // if ((i !== 0) && (i % 10 === 0)) {
-        //     // platforms[i].width = width;
-        //     console.log('yes');
-        // }
-        ctx.rect(platforms[i].x, platforms[i].y, platforms[i].width, platforms[i].height);
+        platformImg.src = '/img/platform.png'
+
+        // reyna finna 10 hvern platform og láta hann covera allan skjáinn í width
+        if (i % 10 === 0) {
+            platforms[i].width = width;
+            platforms[i].x = 0;
+        }
+        ctx.drawImage(platformImg, platforms[i].x, platforms[i].y, platforms[i].width, platforms[i].height);
         platforms[i].velY = gravity * 5;
         platforms[i].y += platforms[i].velY * 2;
 
         var dir = colCheck(player, platforms[i]);
 
-        if (dir === "l" || dir === "r") {
-            player.velX = 0;
-            player.jumping = false;
-        } else if (dir === "b") {
+        if (dir === "b") {
             player.grounded = true;
             player.jumping = false;
+
             // setur player Y velocity í sama og pallurinn sem hann snertir til að líkja eftir
             // að hann sé standandi á honum
             player.velY = platforms[i].velY;
         }
-        //ehv pæling til að phasea ekki í gegnum loftið
-        //óþarfi að nota ef ekki hægt að fara gegnum platforms
-        // else if (dir === "t") {
-        //     if (platforms[i].y < platforms[i].height) {
-        //         player.velY *= -1;
-        //     }
-        // }
     }
 
     // ============= ALLAR HREYFINGAR GERAST HÉR ==================
     player.x += player.velX * 3; // constant til að hlaupa hraðar
     player.y += player.velY * 2;
+
+    if (player.y < 0) {
+        gravity = 1;
+    } else if (player.y < height / 4) {
+        gravity = 0.8;
+    } else if (player.y < height / 2) {
+        gravity = 0.6
+    } else {
+        gravity = 0.4;
+    }
 
 
     // ================ TEIKNAR PLAYER =====================
@@ -213,9 +248,14 @@ function update() {
 
     ctx.drawImage(harold, player.x, player.y, player.width, player.height);
 
+    // song.play();
     if (player.y < height) {
         requestAnimationFrame(update);
+
+
     } else {
+        song.pause();
+        death.play();
         alert('GAME OVER DUDE');
     }
     // update kallar á sjálft sig fyrir loopu
@@ -230,17 +270,18 @@ function update() {
 //hafa fyrstu platforms static og byrjar að hreyfast og generatea eftir fyrsta touch?!!
 
 setInterval(() => {
-    score += 10;
+    // score += 10;
+    // console.log(score);
     platforms.push({
         x: (Math.random() * ((width - 300) - 20) + 20),
-        y: -20,
-        y: (Math.random() * -50),
-        // return Math.random() * (max - min) + min;
+        y: 0,
         width: 300,
-        height: 40,
+        height: 60,
         velY: 0,
-    })
+    });
 }, 900);
+
+
 //setja breytu í stað 1000 hérna til að setja gamespeed, þarf þá líka að stilla gravity á platforms í leiðinni!!
 
 // ===================== COLLISION CHECK ÚTREIKNINGUR =====================
@@ -262,23 +303,36 @@ function colCheck(shapeA, shapeB) {
         if (oX >= oY) {
             if (vY > 0) {
                 colDir = "t";
-                shapeA.y += oY;
-                //ef við viljum hafa jump í gegnum platforms
-                // if (shapeB.height === 0.01) {
-                //     shapeA.y += oY;
-                //     console.log("You can't go faster than the camera!");
-                // }
+                //ef við viljum ekki hafa jump í gegnum platforms
+                // shapeA.y += oY;
+
+                if (boxes.indexOf(shapeB) > 0) {
+                    shapeA.y += oY;
+                }
             } else {
-                colDir = "b";
-                shapeA.y -= oY;
+                if (shapeA.velY > 0) {
+                    colDir = "b";
+                    shapeA.y -= oY;
+                }
+
             }
         } else {
             if (vX > 0) {
-                colDir = "l";
-                shapeA.x += oX;
+                //indexOf skilar -1 ef hlutur finnst ekki í array
+                // þetta tjékkar þá bara veggi ekki platforms
+                // af einhverjum ástæðum vildi þetta ekki virka fyrir index 0 jafnvel þótt -1 sé minna en fokking 0
+                if (boxes.indexOf(shapeB) !== -1) {
+                    colDir = "l";
+                    shapeA.x += oX;
+                    console.log(boxes.indexOf(shapeB));
+                }
             } else {
-                colDir = "r";
-                shapeA.x -= oX;
+                if (boxes.indexOf(shapeB) > 0) {
+                    console.log(boxes.indexOf(shapeB));
+                    colDir = "r";
+                    shapeA.x -= oX;
+                }
+
             }
         }
     }
@@ -300,19 +354,10 @@ document.body.addEventListener("keyup", function (e) {
     keys[e.key] = false;
 });
 
-
-//hérna mun koma event fyrir spacebar keypress svo það virki ekki að halda honum niðri!!!
-// document.body.addEventListener('keypress', () => {
-
-// })
-
 // =============== BYRJAR AÐ KEYRA update() ÞEGAR WINDOW HEFUR LOADAST =============
 window.addEventListener("load", function () {
     update();
 });
-
-
-
 
 
 // ==================== CHARACTER ANIMATION FRÁ SPRITESHEET ===========================
