@@ -104,8 +104,11 @@ canvas.width = width;
 canvas.height = height;
 
 song.src = "sound/ITTheme.mp3";
+song.volume = .05
 jump.src = '/sound/Jump2.wav';
+jump.volume = .2
 death.src = '/sound/death_7_ian.wav'
+death.volume = .1
 
 
 function update() {
@@ -172,7 +175,7 @@ function update() {
 
     ctx.fillStyle = "white";
     ctx.font = "40px Arial";
-    ctx.fillText("Stigaskor: " + score, 30, 50);
+    ctx.fillText("Score: " + score, 30, 50);
 
     // ================ TEIKNA VEGGI OG TJÉKKA COLLISION ===============================
 
@@ -197,8 +200,7 @@ function update() {
     // ============= BÚA TIL PLATFORMS OG TJÉKKA COLLISION VIÐ PLAYER =====================
 
     for (var i = 0; i < platforms.length; i++) {
-
-        platformImg.src = '/img/platform.png'
+        platformImg.src = 'img/platform.png'
 
         // reyna finna 10 hvern platform og láta hann covera allan skjáinn í width
         if (i % 10 === 0 && i !== 0) {
@@ -268,10 +270,13 @@ function update() {
         song.pause();
         death.play();
         isPlaying = false;
-        alert('Game Over');
+        //gera highscore lista svona
+        //þarf að gera restart takka sem resettar hann ekki!!!
+        let first = document.getElementById('first');
+        first.innerHTML = score;
+        alert(`Game Over \n Score: ${score}`);
     }
     // update kallar á sjálft sig fyrir loopu
-
 }
 
 
@@ -292,6 +297,17 @@ function periodicall() {
     });
     setTimeout(periodicall, time);
 }
+
+setInterval(() => {
+    let overPlatforms = 0;
+    let outOfScreen = 0;
+    for (let i = 0; i < platforms.length; i++) {
+        if ((i !== 0) && (platforms[i].y > player.y)) {
+            overPlatforms += 1;
+        }
+    };
+    score = overPlatforms * 10
+}, 500)
 
 
 

@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: crimson;
+    background-color: darkgray;
 }
 
 canvas {
@@ -10,7 +10,7 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-image: url(/img/background.png);
+    background-image: url(img/background.png);
 }
 
 h2{
@@ -22,5 +22,32 @@ h2{
     transform: rotate(-70deg);
     font-size: 80px;
     text-shadow: 3px 3px 20px black;
-    color: white;
+    color: wheat;
+}
+
+#highscore {
+    position: absolute;
+    top: 300px;
+    right: 150px;
+    width: 450px;
+    height: 600px;
+    background-color: wheat;
+    border-radius: 50px;
+    box-shadow: 5px 5px 10px black;
+}
+
+#highscore h3 {
+    text-align: center;
+    font-size: 50px;
+    margin-bottom: 0;
+}
+
+#highscore ol {
+    position: relative;
+    margin: 40px;
+}
+
+li {
+    padding: 4px;
+    font-size: 30px;
 }
