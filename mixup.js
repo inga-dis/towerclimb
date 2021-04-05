@@ -244,9 +244,25 @@ function update() {
         isPlaying = false;
         //gera highscore lista svona
         //þarf að gera restart takka sem resettar hann ekki!!!
-        // let first = document.getElementById('first');
-        // first.innerHTML = score;
-        alert(`Game Over \n Score: ${score}`);
+        let first = document.getElementById('first');
+        let second = document.getElementById('second');
+        let third = document.getElementById('third');
+        if (score > first.innerText) {
+            pName = prompt(`Game Over \n Score: ${score} \n Enter Name: `);
+            third.innerText = second.innerText;
+            second.innerText = first.innerText;
+            first.innerText = `${pName} : ${score}`;
+        } else if (score > second.innerText) {
+            pName = prompt(`Game Over \n Score: ${score} \n Enter Name: `);
+            third.innerText = second.innerText;
+            second.innerText = `${pName} : ${score}`;
+        } else if (score > third.innerText) {
+            pName = prompt(`Game Over \n Score: ${score} \n Enter Name: `);
+            third.innerText = `${pName} : ${score}`;
+        } else {
+            alert(`Game Over \n Score: ${score}`);
+        }
+
     }
     // update kallar á sjálft sig fyrir loopu
 }
@@ -355,3 +371,4 @@ document.body.addEventListener("keyup", function (e) {
 window.addEventListener("load", function () {
     update();
 });
+
