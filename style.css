@@ -1,11 +1,24 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: darkgray;
+    background-color: rgb(6,8,22);
+}
+#menu {
+    background-color: rgba(24, 141, 92, 0.3);
+
+    color: white;
+    z-index: 100;
+    position: relative;
+    width: 50%;
+    margin: auto;
+    padding: 100px;
+}
+ul {
+    list-style-type: none;
 }
 
+
 canvas {
-    border: 3px solid black;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -48,6 +61,6 @@ h2{
 }
 
 li {
-    padding: 40px;
+    padding: 4px;
     font-size: 30px;
 }

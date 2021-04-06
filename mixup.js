@@ -32,7 +32,7 @@ var canvas = document.getElementById("canvas"),
     time = 700,
     isPlayingCounter = 0,
     isPlaying = false,
-    harold = new Image(),
+    robot = new Image(),
     platformImg = new Image(),
     song = new Audio(),
     death = new Audio(),
@@ -98,28 +98,28 @@ death.volume = .1
 function update() {
 
     //=========== PLAYER IMAGE MANAGEMENT =============
-    harold.src = 'img/harold(1).png';
+    robot.src = 'img/character_robot_idle.png';
 
     if (player.jumping && keys['ArrowRight']) {
         if (player.velY < 0) {
-            harold.src = 'img/haroldJumpRight.png';
+            robot.src = 'img/character_robot_jump_right.png';
         } else if (player.velY > 0) {
-            harold.src = 'img/haroldDownRight.png';
+            robot.src = 'img/character_robot_fall_right.png';
         }
     }
     else if (player.jumping && keys['ArrowLeft']) {
         if (player.velY < 0) {
-            harold.src = 'img/haroldJumpLeft.png';
+            robot.src = 'img/character_robot_jump_left.png';
         } else if (player.velY > 0) {
-            harold.src = 'img/haroldDownLeft.png';
+            robot.src = 'img/character_robot_fall_left.png';
         }
     }
     else if (player.velY < 0 || player.jumping) {
-        harold.src = 'img/haroldJump.png';
+        robot.src = 'img/character_robot_jump.png';
     } else if (keys['ArrowRight']) {
-        harold.src = 'img/haroldRight.png';
+        robot.src = 'img/character_robot_run_right.png';
     } else if (keys['ArrowLeft']) {
-        harold.src = 'img/haroldLeft.png';
+        robot.src = 'img/character_robot_run_left.png';
     }
 
 
@@ -220,7 +220,7 @@ function update() {
 
     // ================ TEIKNAR PLAYER =====================
 
-    ctx.drawImage(harold, player.x, player.y, player.width, player.height);
+    ctx.drawImage(robot, player.x, player.y, player.width, player.height);
 
     // ================ TEIKNA SCORE ======================
 
