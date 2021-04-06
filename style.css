@@ -40,13 +40,7 @@ h2{
 
 #highscore {
     position: absolute;
-    top: 300px;
-    right: 150px;
-    width: 450px;
-    height: 600px;
-    background-color: wheat;
-    border-radius: 50px;
-    box-shadow: 5px 5px 10px black;
+    display: none;
 }
 
 #highscore h3 {

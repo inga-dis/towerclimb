@@ -10,28 +10,42 @@
 </head>
 
 <body>
-
     <h2>MEMBER FLASH PLAYER?</h2>
     <canvas id="canvas"></canvas>
+    <button type="button" onclick="menuToggle()">menu</button>
     <div id="menu">
         <ul>
-            <li><button type="button">Spila</li></button>
-            <li><button type="button">Highscore</li></button>
+            <li><button type="button" onclick="menuToggle()">Spila</li></button>
+            <li><button type="button" onclick="highscoreToggle()">Highscore</li></button>
+            <div id="highscore">
+                <h3>Highscore</h3>
+                <ol>
+                    <li id="first">120</li>
+                    <li id="second">80</li>
+                    <li id="third">70</li>
+                </ol>
+            </div>
         </ul>
     </div>
-
-    <div id="highscore">
-        <h3>Highscore</h3>
-        <ol>
-            <li id="first">120</li>
-            <li id="second">80</li>
-            <li id="third">70</li>
-        </ol>
-    </div>
-    <script src="mixup.js">
-
+    <script src="mixup.js"> 
     </script>
-
+    <script>
+        function menuToggle() {
+        var x = document.getElementById("menu");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+    function highscoreToggle() {
+        var x = document.getElementById("highscore");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }  
+    </script>
 </body>
-
 </html>
